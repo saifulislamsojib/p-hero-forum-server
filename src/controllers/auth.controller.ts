@@ -8,14 +8,15 @@ import { compare, hash } from 'bcrypt';
 import { Request, Response } from 'express';
 
 export const registration = async (req: Request<AnyObject, AnyObject, Auth>, res: Response) => {
-  const { name, email, password: plainPassword, phone } = req.body;
+  const { name, email, password: plainPassword, batch, role } = req.body;
   try {
     const password = await hash(plainPassword, 10);
     const user = await createUser({
       name,
       email,
       password,
-      phone,
+      batch,
+      role,
     });
     const payload = getPayload(user);
     const token = createJwtToken(payload);
@@ -45,6 +46,10 @@ export const login = async (req: Request<AnyObject, AnyObject, LoginBody>, res: 
   } catch (err) {
     res.status(400).json(err);
   }
+};
+
+export const authCheckResponse = async (req: Request, res: Response) => {
+  res.status(201).json({ auth: req.auth });
 };
 
 export const getLoggedInUser = async (req: Request, res: Response) => {

@@ -7,7 +7,8 @@ export interface AuthPayload {
   _id: string;
   name: string;
   email: string;
-  phone: string;
+  batch: string;
+  role: string;
 }
 
 export interface Auth extends AuthPayload {
@@ -18,7 +19,6 @@ export interface ValidationError extends Error {
   code: number;
   keyPattern: {
     email?: string;
-    phone?: string;
   };
   errors: {
     [x: string]: {
