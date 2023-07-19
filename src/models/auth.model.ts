@@ -1,7 +1,7 @@
 import { Auth } from '@/types/auth';
 import { model, Schema } from 'mongoose';
 
-const authModel = new Schema({
+const authModel = new Schema<Auth>({
   name: {
     type: String,
     trim: true,

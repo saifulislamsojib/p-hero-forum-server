@@ -8,7 +8,7 @@ export interface AuthPayload {
   name: string;
   email: string;
   batch: string;
-  role: string;
+  role: 'user' | 'admin';
 }
 
 export interface Auth extends AuthPayload {

@@ -37,9 +37,11 @@
   "rules": {
     "camelcase": 0,
     "object-curly-newline": 0,
+    "operator-linebreak": 0,
     "no-underscore-dangle": 0,
     "no-console": 0,
     "linebreak-style": 0,
+    "implicit-arrow-linebreak": 0,
     "@typescript-eslint/no-non-null-assertion": 0,
     "prettier/prettier": [
       "error",
