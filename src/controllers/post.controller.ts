@@ -4,7 +4,7 @@ import { RequestHandler } from 'express';
 
 export const createPostHandler: RequestHandler = async (req, res) => {
   const { _id } = req.auth!;
-  const postFromBody: IPost = req.body.post;
+  const postFromBody: IPost = req.body;
   postFromBody.author = _id;
 
   try {
@@ -33,7 +33,7 @@ export const deletePostHandler: RequestHandler = async (req, res) => {
 export const updatePostHandler: RequestHandler = async (req, res) => {
   const { _id } = req.auth!;
   try {
-    const { postBody, tags, category, imagesOrVideos }: Partial<IPost> = req.body.post;
+    const { postBody, tags, category, imagesOrVideos }: Partial<IPost> = req.body;
     const post = await updatePost(
       req.params.id,
       {
@@ -89,7 +89,7 @@ export const updatePostForAdminHandler: RequestHandler = async (req, res) => {
       res.status(401).json({ message: 'permission denied' });
       return;
     }
-    const { tags, category, priority }: Partial<IPost> = req.body.post;
+    const { tags, category, priority }: Partial<IPost> = req.body;
     const post = await updatePost(req.params.id, { tags, category, priority });
     res.status(201).json({ post, message: 'Post updated successfully!' });
   } catch (error) {
