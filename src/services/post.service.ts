@@ -4,7 +4,10 @@ import { FilterQuery, UpdateQuery } from 'mongoose';
 
 export const createPost = (post: Omit<IPost, '_id'>) => new Post(post).save();
 
-export const deletePost = (_id: string, userId: string) => Post.deleteOne({ _id, author: userId });
+export const deletePost = (_id: string, userId?: string) => {
+  const query = userId ? { _id, author: userId } : { _id };
+  return Post.deleteOne(query);
+};
 
 export const getPosts = (search: string, userId: string) => {
   const query: FilterQuery<IPost> = {};

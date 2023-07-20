@@ -18,7 +18,6 @@ const authModel = new Schema<Auth>({
   batch: {
     type: String,
     trim: true,
-    required: [true, 'batch is required'],
   },
   role: {
     type: String,

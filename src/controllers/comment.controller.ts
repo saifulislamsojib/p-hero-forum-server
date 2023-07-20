@@ -14,7 +14,10 @@ export const createCommentHandler: RequestHandler = async (req, res) => {
     });
     const [createdComment] = await Promise.all([createComment(comment), commentIncrease]);
 
-    res.status(201).json({ comment: createdComment, message: 'Comment posted successfully!' });
+    res.status(201).json({
+      comment: createdComment,
+      message: 'Comment posted successfully!',
+    });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
     console.log(error);

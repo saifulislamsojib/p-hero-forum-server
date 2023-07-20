@@ -24,9 +24,9 @@ export const createPostHandler: RequestHandler = async (req, res) => {
 };
 
 export const deletePostHandler: RequestHandler = async (req, res) => {
-  const { _id } = req.auth!;
+  const { _id, role } = req.auth!;
   try {
-    const { deletedCount } = await deletePost(req.params.id, _id);
+    const { deletedCount } = await deletePost(req.params.id, role === 'admin' ? undefined : _id);
     res.status(201).json({
       message: deletedCount ? 'Post deleted successfully!' : 'Post not deleted',
       deletedCount,
