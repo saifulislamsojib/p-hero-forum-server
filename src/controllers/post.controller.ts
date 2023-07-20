@@ -1,11 +1,18 @@
-import { createPost, deletePost, updatePost, updatePostStatus } from '@/services/post.service';
+import {
+  createPost,
+  deletePost,
+  getPosts,
+  updatePost,
+  updatePostStatus,
+} from '@/services/post.service';
 import IPost from '@/types/post';
 import { RequestHandler } from 'express';
 
 export const createPostHandler: RequestHandler = async (req, res) => {
-  const { _id } = req.auth!;
+  const { _id, role } = req.auth!;
   const postFromBody: IPost = req.body;
   postFromBody.author = _id;
+  postFromBody.authorRole = role;
 
   try {
     const post = await createPost(postFromBody);
@@ -102,6 +109,17 @@ export const increasePostUpvoteHandler: RequestHandler = async (req, res) => {
   try {
     const post = await updatePost(req.params.id, { $inc: { upvote: 1 } });
     res.status(201).json({ post, message: 'Upvote added successfully!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+    console.log(error);
+  }
+};
+export const getAllPosts: RequestHandler = async (req, res) => {
+  const { category } = req.query;
+  const { _id } = req.auth!;
+  try {
+    const posts = await getPosts(category as string, _id);
+    res.status(201).json({ posts });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
     console.log(error);

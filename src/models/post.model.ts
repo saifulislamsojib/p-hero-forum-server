@@ -34,10 +34,19 @@ const postModel = new Schema<IPost>(
       type: String,
       enum: ['me', 'admin'],
     },
+    commentedByAdmin: {
+      type: Boolean,
+      default: false,
+    },
     author: {
       type: Types.ObjectId,
       ref: 'user',
       required: [true, 'Author is required'],
+    },
+    authorRole: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
     },
     upvote: {
       type: Number,
