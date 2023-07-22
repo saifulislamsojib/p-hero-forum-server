@@ -17,6 +17,7 @@ interface IPost {
   commentsCount: number;
   commentedByAdmin: boolean;
   priority: 'High' | 'Medium' | 'Low';
+  note?: string;
 }
 
 export default IPost;

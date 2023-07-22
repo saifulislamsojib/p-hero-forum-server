@@ -25,7 +25,7 @@ export const getPosts = (search: string, userId: string) => {
 
 export const updatePost = (_id: string, update: UpdateQuery<IPost>, userId?: string) => {
   const query = userId ? { _id, author: userId } : { _id };
-  return Post.findOneAndUpdate(query, update, { runValidators: true });
+  return Post.findOneAndUpdate(query, update, { new: true, runValidators: true });
 };
 
 export const updatePostStatus = (_id: string, status: IPost['status'], userId?: string) => {

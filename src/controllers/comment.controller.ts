@@ -1,4 +1,9 @@
-import { createComment, deleteComment, updateComment } from '@/services/comment.service';
+import {
+  createComment,
+  deleteComment,
+  getAllCommentsByPostId,
+  updateComment,
+} from '@/services/comment.service';
 import { updatePost } from '@/services/post.service';
 import IComment from '@/types/comment';
 import { RequestHandler } from 'express';
@@ -44,6 +49,15 @@ export const updateCommentHandler: RequestHandler = async (req, res) => {
     const { text }: Partial<IComment> = req.body.post;
     const post = await updateComment(req.params.id, { text }, _id);
     res.status(201).json({ post, message: 'Post updated successfully!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+    console.log(error);
+  }
+};
+export const getAllCommentsByPostIdHandler: RequestHandler = async (req, res) => {
+  try {
+    const comments = await getAllCommentsByPostId(req.params.id);
+    res.status(201).json({ comments });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
     console.log(error);

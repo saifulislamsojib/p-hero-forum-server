@@ -51,7 +51,10 @@ export const updatePostHandler: RequestHandler = async (req, res) => {
       },
       _id,
     );
-    res.status(201).json({ post, message: 'Post updated successfully!' });
+    res.status(201).json({
+      isUpdated: !!post,
+      message: post ? 'Post updated successfully!' : 'Post not updated successfully!',
+    });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
     console.log(error);
@@ -96,9 +99,12 @@ export const updatePostForAdminHandler: RequestHandler = async (req, res) => {
       res.status(401).json({ message: 'permission denied' });
       return;
     }
-    const { tags, category, priority }: Partial<IPost> = req.body;
-    const post = await updatePost(req.params.id, { tags, category, priority });
-    res.status(201).json({ post, message: 'Post updated successfully!' });
+    const { tags, category, priority, note, status }: Partial<IPost> = req.body;
+    const post = await updatePost(req.params.id, { tags, category, priority, note, status });
+    res.status(201).json({
+      isUpdated: !!post,
+      message: post ? 'Post updated successfully!' : 'Post not updated successfully!',
+    });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
     console.log(error);

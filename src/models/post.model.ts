@@ -28,7 +28,7 @@ const postModel = new Schema<IPost>(
     },
     commentOff: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     commentOffBy: {
       type: String,
@@ -61,6 +61,7 @@ const postModel = new Schema<IPost>(
       enum: ['High', 'Medium', 'Low'],
       default: 'Medium',
     },
+    note: String,
   },
   { timestamps: true },
 );

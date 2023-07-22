@@ -10,3 +10,6 @@ export const updateComment = (_id: string, update: UpdateQuery<IComment>, userId
   const query = { _id, author: userId };
   return Comment.findOneAndUpdate(query, update, { runValidators: true });
 };
+
+export const getAllCommentsByPostId = (id: string) =>
+  Comment.find({ post: id }).populate('sender', ['name', 'email', 'role', 'batch']);
