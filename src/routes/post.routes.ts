@@ -2,6 +2,7 @@ import {
   createPostHandler,
   deletePostHandler,
   getAllPosts,
+  getPostsCount,
   increasePostUpvoteHandler,
   updatePostCommentOffHandler,
   updatePostForAdminHandler,
@@ -15,6 +16,7 @@ const postRoutes = Router();
 
 postRoutes.post('/', authCheck, createPostHandler);
 postRoutes.get('/', authCheck, getAllPosts);
+postRoutes.get('/counts', authCheck, getPostsCount);
 postRoutes.delete('/:id', authCheck, deletePostHandler);
 postRoutes.patch('/status/:id', authCheck, updatePostStatusHandler);
 postRoutes.patch('/commentOff/:id', authCheck, updatePostCommentOffHandler);

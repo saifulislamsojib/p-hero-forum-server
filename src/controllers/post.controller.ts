@@ -100,7 +100,13 @@ export const updatePostForAdminHandler: RequestHandler = async (req, res) => {
       return;
     }
     const { tags, category, priority, note, status }: Partial<IPost> = req.body;
-    const post = await updatePost(req.params.id, { tags, category, priority, note, status });
+    const post = await updatePost(req.params.id, {
+      tags,
+      category,
+      priority,
+      note,
+      status,
+    });
     res.status(201).json({
       isUpdated: !!post,
       message: post ? 'Post updated successfully!' : 'Post not updated successfully!',
@@ -120,12 +126,40 @@ export const increasePostUpvoteHandler: RequestHandler = async (req, res) => {
     console.log(error);
   }
 };
+
 export const getAllPosts: RequestHandler = async (req, res) => {
   const { category } = req.query;
   const { _id } = req.auth!;
   try {
-    const posts = await getPosts(category as string, _id);
+    const posts = await getPosts({
+      search: category as string,
+      userId: _id,
+    });
     res.status(201).json({ posts });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+    console.log(error);
+  }
+};
+
+export const getPostsCount: RequestHandler = async (req, res) => {
+  const { _id } = req.auth!;
+  try {
+    const posts = await getPosts({
+      search: 'my-post',
+      userId: _id,
+      select: '_id',
+      sort: null,
+      populate: null,
+    });
+    const allPostCount = posts.length;
+    const resolvedPostCount = posts.filter((post) => post.status === 'resolved').length;
+    const unresolvedPostCount = posts.filter((post) => post.status === 'unresolved').length;
+    const rejectedPostCount = posts.filter((post) => post.status === 'rejected').length;
+
+    res
+      .status(201)
+      .json({ allPostCount, resolvedPostCount, unresolvedPostCount, rejectedPostCount });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
     console.log(error);
