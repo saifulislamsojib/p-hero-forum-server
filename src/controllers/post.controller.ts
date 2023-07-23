@@ -141,6 +141,18 @@ export const getAllPosts: RequestHandler = async (req, res) => {
     console.log(error);
   }
 };
+export const getTrendingPostsHandler: RequestHandler = async (req, res) => {
+  try {
+    const posts = await getPosts({
+      limit: 5,
+      select: '-imagesOrVideos -commentOff -commentOffBy -commentedByAdmin -note',
+    });
+    res.status(201).json({ posts });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+    console.log(error);
+  }
+};
 
 export const getPostsCount: RequestHandler = async (req, res) => {
   const { _id } = req.auth!;
@@ -148,7 +160,7 @@ export const getPostsCount: RequestHandler = async (req, res) => {
     const posts = await getPosts({
       search: 'my-post',
       userId: _id,
-      select: '_id',
+      select: '_id status',
       sort: null,
       populate: null,
     });
@@ -157,9 +169,12 @@ export const getPostsCount: RequestHandler = async (req, res) => {
     const unresolvedPostCount = posts.filter((post) => post.status === 'unresolved').length;
     const rejectedPostCount = posts.filter((post) => post.status === 'rejected').length;
 
-    res
-      .status(201)
-      .json({ allPostCount, resolvedPostCount, unresolvedPostCount, rejectedPostCount });
+    res.status(201).json({
+      allPostCount,
+      resolvedPostCount,
+      unresolvedPostCount,
+      rejectedPostCount,
+    });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
     console.log(error);

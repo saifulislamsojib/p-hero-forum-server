@@ -9,25 +9,25 @@ export const deletePost = (_id: string, userId?: string) => {
   return Post.deleteOne(query);
 };
 
-const defaultSort: { [key: string]: SortOrder | { $meta: 'textScore' } } = {
+type GetPostProps = {
+  search?: string;
+  userId?: string;
+  limit?: number;
+  skip?: number;
+  sort?: { [key: string]: SortOrder | { $meta: 'textScore' } } | null;
+  populate?: [string | string[], string] | null;
+  select?: string;
+};
+
+const defaultSort: GetPostProps['sort'] = {
   priority: 1,
   commentsCount: -1,
   upvote: -1,
   createdAt: -1,
 };
 
-const searchSort: { [key: string]: SortOrder | { $meta: 'textScore' } } = {
+const searchSort: GetPostProps['sort'] = {
   createdAt: -1,
-};
-
-type GetPostProps = {
-  search: string;
-  userId: string;
-  limit?: number;
-  skip?: number;
-  sort?: { [key: string]: SortOrder | { $meta: 'textScore' } } | null;
-  populate?: [string | string[], string] | null;
-  select?: string;
 };
 
 export const getPosts = ({
