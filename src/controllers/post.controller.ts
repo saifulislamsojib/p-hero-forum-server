@@ -128,12 +128,20 @@ export const increasePostUpvoteHandler: RequestHandler = async (req, res) => {
 };
 
 export const getAllPosts: RequestHandler = async (req, res) => {
-  const { category } = req.query;
+  const { category, status, batch, tag, days, startDay, endDay } = req.query;
   const { _id } = req.auth!;
   try {
     const posts = await getPosts({
       search: category as string,
       userId: _id,
+      filter: {
+        status,
+        batch,
+        tag,
+        days,
+        startDay,
+        endDay,
+      } as Record<string, string>,
     });
     res.status(201).json({ posts });
   } catch (error) {

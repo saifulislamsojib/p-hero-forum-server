@@ -17,6 +17,15 @@ type GetPostProps = {
   sort?: { [key: string]: SortOrder | { $meta: 'textScore' } } | null;
   populate?: [string | string[], string] | null;
   select?: string;
+  filter?: {
+    status?: string;
+    batch?: string;
+    tag?: string;
+    days?: string;
+    startDay?: string;
+    endDay?: string;
+    problemCategory?: string;
+  };
 };
 
 const defaultSort: GetPostProps['sort'] = {
@@ -38,6 +47,7 @@ export const getPosts = ({
   sort,
   populate,
   select = '-commentedByAdmin -authorRole',
+  filter,
 }: GetPostProps) => {
   const query: FilterQuery<IPost> = {};
   if (search === 'my-post') {
@@ -48,6 +58,18 @@ export const getPosts = ({
     query.status = 'unresolved';
   } else if (search === 'not-replied') {
     query.commentedByAdmin = false;
+  }
+
+  if (filter) {
+    // if (filter.batch) {
+    //   query.
+    // }
+    if (filter.status) {
+      query.status = filter.status;
+    }
+    if (filter.status) {
+      query.tag = {};
+    }
   }
   const result = Post.find(query).select(select);
   if (sort !== null) {
