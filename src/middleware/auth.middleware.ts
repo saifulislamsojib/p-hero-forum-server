@@ -2,7 +2,7 @@ import checkJWT from '@/utils/checkJWT';
 import { RequestHandler } from 'express';
 
 const authCheck: RequestHandler = (req, res, next): void => {
-  const token = req.headers.authorization;
+  const token = req.cookies.jwtToken || req.headers.authorization;
   try {
     const auth = checkJWT(token);
     if (auth) {
@@ -17,3 +17,12 @@ const authCheck: RequestHandler = (req, res, next): void => {
 };
 
 export default authCheck;
+
+export const tokenCheck: RequestHandler = (req, res, next): void => {
+  const token = req.cookies.jwtToken || req.headers.authorization;
+  if (token && token.startsWith('Bearer ') && token.split(' ')[1]) {
+    next();
+  } else {
+    res.status(201).json({ message: 'Token not found' });
+  }
+};

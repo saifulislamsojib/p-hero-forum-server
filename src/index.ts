@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import configs from './configs';
@@ -6,13 +7,15 @@ import errorHandler, { notFound } from './middleware/errorHandler.middleware';
 import apiRoute from './routes/api.routes';
 import authRoute from './routes/auth.routes';
 import rootRoute from './routes/root.routes';
+
 import { app, server } from './utils/createServer';
 
 const { port, origin } = configs;
 
 // app middleware
 app.use(express.json());
-app.use(cors({ origin }));
+app.use(cors({ origin, credentials: true }));
+app.use(cookieParser());
 
 // database connection with mongoose
 mongoConnect();

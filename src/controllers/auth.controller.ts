@@ -20,7 +20,15 @@ export const registration = async (req: Request<AnyObject, AnyObject, Auth>, res
     });
     const payload = getPayload(user);
     const token = createJwtToken(payload);
-    res.status(201).json({ auth: payload, token, message: 'Account Register Successfully' });
+    res
+      .cookie('jwtToken', `Bearer ${token}`, {
+        secure: true,
+        httpOnly: true,
+        sameSite: 'none',
+        maxAge: 182 * 24 * 60 * 60,
+      })
+      .status(201)
+      .json({ auth: payload, token, message: 'Account Register Successfully' });
   } catch (err) {
     const errors = handleError(err as ValidationError);
     res.status(203).json({ errors });
@@ -36,7 +44,15 @@ export const login = async (req: Request<AnyObject, AnyObject, LoginBody>, res: 
       if (isValidPassword) {
         const auth = getPayload(user);
         const token = createJwtToken(auth);
-        res.status(201).json({ auth, token, message: 'Account Login Successfully' });
+        res
+          .cookie('jwtToken', `Bearer ${token}`, {
+            secure: true,
+            httpOnly: true,
+            sameSite: 'none',
+            maxAge: 182 * 24 * 60 * 60,
+          })
+          .status(201)
+          .json({ auth, token, message: 'Account Login Successfully' });
       } else {
         res.status(203).json({ error: 'Invalid Email or Password' });
       }

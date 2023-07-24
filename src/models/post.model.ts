@@ -18,7 +18,17 @@ const postModel = new Schema<IPost>(
       required: [true, 'Category is required'],
     },
     imagesOrVideos: {
-      type: [String],
+      type: [
+        {
+          asset_id: String,
+          width: Schema.Types.Mixed,
+          height: Schema.Types.Mixed,
+          src: String,
+          format: String,
+          resource_type: String,
+          blurDataURL: String,
+        },
+      ],
       default: [],
     },
     status: {

@@ -1,11 +1,21 @@
 import { ObjectId } from 'mongoose';
 
+type ImagesOrVideo = {
+  asset_id: string;
+  width: `${number}` | number;
+  height: `${number}` | number;
+  src: string;
+  format: string;
+  resource_type: string;
+  blurDataURL?: string;
+};
+
 interface IPost {
   _id: string;
   postBody: string;
   tags: string[];
   category: string;
-  imagesOrVideos: string[];
+  imagesOrVideos: ImagesOrVideo[];
   status: 'new' | 'resolved' | 'under investigation' | 'unresolved' | 'rejected';
   commentOff: boolean;
   commentOffBy?: 'me' | 'admin';
