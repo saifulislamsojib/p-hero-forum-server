@@ -9,10 +9,11 @@ import IPost from '@/types/post';
 import { RequestHandler } from 'express';
 
 export const createPostHandler: RequestHandler = async (req, res) => {
-  const { _id, role } = req.auth!;
+  const { _id, role, batch } = req.auth!;
   const postFromBody: IPost = req.body;
   postFromBody.author = _id;
   postFromBody.authorRole = role;
+  postFromBody.authorBatch = batch;
 
   try {
     const post = await createPost(postFromBody);
@@ -128,7 +129,7 @@ export const increasePostUpvoteHandler: RequestHandler = async (req, res) => {
 };
 
 export const getAllPosts: RequestHandler = async (req, res) => {
-  const { category, status, batch, tag, days, startDay, endDay } = req.query;
+  const { category, status, batch, tag, days, startDay, endDay, problemCategory } = req.query;
   const { _id } = req.auth!;
   try {
     const posts = await getPosts({
@@ -141,6 +142,7 @@ export const getAllPosts: RequestHandler = async (req, res) => {
         days,
         startDay,
         endDay,
+        problemCategory,
       } as Record<string, string>,
     });
     res.status(201).json({ posts });
@@ -153,7 +155,7 @@ export const getTrendingPostsHandler: RequestHandler = async (req, res) => {
   try {
     const posts = await getPosts({
       limit: 5,
-      select: '-imagesOrVideos -commentOff -commentOffBy -commentedByAdmin -note',
+      select: '-imagesOrVideos -commentOff -commentOffBy -commentedByAdmin -note -authorBatch',
     });
     res.status(201).json({ posts });
   } catch (error) {

@@ -58,6 +58,10 @@ const postModel = new Schema<IPost>(
       enum: ['user', 'admin'],
       default: 'user',
     },
+    authorBatch: {
+      type: String,
+      required: [true, 'Author batch is required'],
+    },
     upvote: {
       type: Number,
       default: 0,

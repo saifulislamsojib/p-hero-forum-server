@@ -22,6 +22,7 @@ interface IPost {
   createdAt: string;
   updatedAt: string;
   author: string | ObjectId;
+  authorBatch: string;
   authorRole: 'user' | 'admin';
   upvote: number;
   commentsCount: number;

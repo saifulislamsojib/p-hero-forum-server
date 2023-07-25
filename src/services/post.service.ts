@@ -1,5 +1,6 @@
 import Post from '@/models/post.model';
 import IPost from '@/types/post';
+import subDay from 'date-fns/subDays';
 import { FilterQuery, SortOrder, UpdateQuery } from 'mongoose';
 
 export const createPost = (post: Omit<IPost, '_id'>) => new Post(post).save();
@@ -46,7 +47,7 @@ export const getPosts = ({
   skip,
   sort,
   populate,
-  select = '-commentedByAdmin -authorRole',
+  select = '-commentedByAdmin -authorRole -authorBatch',
   filter,
 }: GetPostProps) => {
   const query: FilterQuery<IPost> = {};
@@ -61,15 +62,36 @@ export const getPosts = ({
   }
 
   if (filter) {
-    // if (filter.batch) {
-    //   query.
-    // }
+    if (filter.endDay && filter.startDay) {
+      query.createdAt = {
+        $gt: new Date(filter.startDay),
+        $lt: new Date(filter.endDay),
+      };
+    }
+    if (filter.days) {
+      const [day] = filter.days.split(' ');
+      query.createdAt = {
+        $gt: subDay(new Date(), +day),
+        $lt: new Date(),
+      };
+      console.log(day);
+    }
+    console.log(filter);
     if (filter.status) {
       query.status = filter.status;
     }
-    if (filter.status) {
-      query.tag = {};
+    if (filter.tag) {
+      query.tags = {
+        $in: filter.tag,
+      };
     }
+    if (filter.problemCategory) {
+      query.category = filter.problemCategory;
+    }
+    if (filter.batch) {
+      query.authorBatch = filter.batch;
+    }
+    console.log(query);
   }
   const result = Post.find(query).select(select);
   if (sort !== null) {
