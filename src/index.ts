@@ -1,4 +1,3 @@
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import configs from './configs';
@@ -15,7 +14,6 @@ const { port, origin } = configs;
 // app middleware
 app.use(express.json());
 app.use(cors({ origin, credentials: true }));
-app.use(cookieParser());
 
 // database connection with mongoose
 mongoConnect();
